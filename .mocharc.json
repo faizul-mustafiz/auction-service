@@ -1,0 +1,7 @@
+{
+  "spec": "./src/v1/tests/index.spec.ts",
+  "extension": ["ts"],
+  "require": "ts-node/register",
+  "timeout": 120000,
+  "exit": true
+}
