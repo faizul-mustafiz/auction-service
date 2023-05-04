@@ -60,7 +60,7 @@ const testEnvTransporterOption = {
  * * testLogger = winston.createLogger({levels: winston.config.npm.levels, transports:[your custom transporter here]})
  */
 let logger;
-if (process.env.NODE_ENV === 'test') {
+if (process.env.NODE_ENV === 'testing') {
   logger = createLogger({
     levels: config.npm.levels,
     format: combine(timestamp(), splat(), json()),
