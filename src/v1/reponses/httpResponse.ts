@@ -15,3 +15,11 @@ export const Created = (res: Response, payload: SuccessResponsePayload) => {
     result: payload.result,
   });
 };
+
+export const BadRequest = (res: Response, payload: SuccessResponsePayload) => {
+  return res.status(400).json({
+    success: false,
+    message: payload.message,
+    result: payload.result,
+  });
+};
