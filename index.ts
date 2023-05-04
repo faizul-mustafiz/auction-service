@@ -1,8 +1,8 @@
-import { App } from './v1/app';
-import { AppConfig } from './v1/configs/app.config';
-import { Logger } from './v1/loggers/logger';
-import { CloseMongoPluginConnection } from './v1/plugins/mongo.plugin';
-import { CloseRedisPluginConnection } from './v1/plugins/redis.plugin';
+import { App } from './src/v1/app';
+import { AppConfig } from './src/v1/configs/app.config';
+import { Logger } from './src/v1/loggers/logger';
+import { CloseMongoPluginConnection } from './src/v1/plugins/mongo.plugin';
+import { CloseRedisPluginConnection } from './src/v1/plugins/redis.plugin';
 const { port, host } = AppConfig;
 
 /**
