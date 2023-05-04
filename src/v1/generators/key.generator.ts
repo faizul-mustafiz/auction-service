@@ -1,9 +1,9 @@
-import * as _crypto from 'crypto';
-const accessToken = _crypto.randomBytes(64).toString('hex');
-const refreshToken = _crypto.randomBytes(64).toString('hex');
-const verifyToken = _crypto.randomBytes(32).toString('hex');
-const changePasswordToken = _crypto.randomBytes(32).toString('hex');
-const resetPasswordToken = _crypto.randomBytes(32).toString('hex');
+import { randomBytes } from 'crypto';
+const accessToken = randomBytes(64).toString('hex');
+const refreshToken = randomBytes(64).toString('hex');
+const verifyToken = randomBytes(32).toString('hex');
+const changePasswordToken = randomBytes(32).toString('hex');
+const resetPasswordToken = randomBytes(32).toString('hex');
 console.table({
   accessToken,
   refreshToken,
