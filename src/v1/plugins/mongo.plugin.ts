@@ -38,9 +38,7 @@ const mongoDisconnectCallback = () => {
  */
 
 export const InitiateMongoPluginConnection = () => {
-  if (config.url) {
-    mongoose.connect(config.url, options);
-  }
+  mongoose.connect(config.url, options);
   mongoose.Promise = global.Promise;
   /**
    * * mongoClient onConnected and onError event handler

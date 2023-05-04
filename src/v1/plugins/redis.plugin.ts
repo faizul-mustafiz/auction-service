@@ -45,4 +45,4 @@ export const CloseRedisPluginConnection = () => {
   redisClient.disconnect();
 };
 
-export const RedisPlugin = redisClient;
+export const RedisClient = redisClient;
