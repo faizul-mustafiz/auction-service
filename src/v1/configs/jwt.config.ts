@@ -46,6 +46,6 @@ export const JWTConfig = {
   verifyTokenConfig,
   resetPasswordTokenConfig,
   changePasswordTokenConfig,
-  pubicKey: PUBLIC_KEY,
+  publicKey: PUBLIC_KEY,
   privateKey: PRIVATE_KEY,
 };
