@@ -4,6 +4,7 @@
   "description": "This this a rest service for handeling an auction management system. Users can create items and make items available for auction and bid on items.",
   "main": "index.js",
   "scripts": {
+    "test": "mocha",
     "clean": "rm -rf ./dist",
     "build": "npm run clean && tsc",
     "start": "npm run build && node ./dist/index.js",

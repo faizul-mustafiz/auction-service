@@ -8,7 +8,7 @@ const { port, host } = AppConfig;
 /**
  * * create express server with port and host imported form app.config
  */
-const server = App.listen(Number(port), host, () => {
+export const Server = App.listen(Number(port), host, () => {
   Logger.debug('Express is running on →');
   console.table({
     host: host,
@@ -23,7 +23,7 @@ const server = App.listen(Number(port), host, () => {
  * * and then proceed with process.exit(exitCode)
  */
 const graceFullyCloseServerAndPluginConnections = (exitCode: number) => {
-  server.close(() => {
+  Server.close(() => {
     Logger.debug('Closing the Server...');
     CloseMongoPluginConnection();
     CloseRedisPluginConnection();
@@ -72,5 +72,3 @@ process.on('beforeExit', (code) => {
 process.on('exit', (code) => {
   Logger.debug(`Process exit event with code: ${code}`);
 });
-
-export const Server = App;

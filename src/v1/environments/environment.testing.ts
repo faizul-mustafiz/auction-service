@@ -15,7 +15,7 @@ export const environment = {
   REDIS_USERNAME: process.env.REDIS_USERNAME as string,
   REDIS_PASSWORD: process.env.REDIS_PASSWORD as string,
   // mongo environment variables
-  MONGO_URL: process.env.MONGO_URL as string,
+  MONGO_URL: process.env.MONGO_URL_TEST as string,
   MONGO_USERNAME: process.env.MONGO_USERNAME as string,
   MONGO_PASSWORD: process.env.MONGO_PASSWORD as string,
   // hashing algorithm for encryption
