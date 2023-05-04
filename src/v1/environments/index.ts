@@ -6,19 +6,19 @@ import * as testEnvVariables from './environment.testing';
 let envVariables;
 switch (process.env.NODE_ENV) {
   case 'development':
-    envVariables = devEnvVariables.default;
+    envVariables = devEnvVariables.environment;
     break;
   case 'staging':
-    envVariables = stageEnvVariables.default;
+    envVariables = stageEnvVariables.environment;
     break;
   case 'production':
-    envVariables = prodEnvVariables.default;
+    envVariables = prodEnvVariables.environment;
     break;
   case 'testing':
-    envVariables = testEnvVariables.default;
+    envVariables = testEnvVariables.environment;
     break;
   default:
-    envVariables = devEnvVariables.default;
+    envVariables = devEnvVariables.environment;
     break;
 }
 
