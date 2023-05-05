@@ -372,7 +372,7 @@ const forgotPassword = async (
     /**
      * * get {email} form request body
      * * if email not provided send 400 bad BadRequestError
-     * @param BadRequestError(origin, message)
+     * @function BadRequestError(origin, message)
      */
     const { email } = req.body;
     if (!email) {
@@ -383,7 +383,7 @@ const forgotPassword = async (
     }
     /**
      * * check if email doesn't exists, send 400 BadRequestError
-     * @param BadRequestError(origin, message)
+     * @function BadRequestError(origin, message)
      */
     const user = await User.emailExist(email);
     Logger.debug('user: %s', user);
@@ -451,7 +451,7 @@ const changePassword = async (
     /**
      * * check if password is given in the body
      * * if there is no verification code or password send 400 BadRequestError
-     * @param BadRequestError(origin, message)
+     * @function BadRequestError(origin, message)
      */
     const { new_password } = req.body;
     if (!new_password) {
@@ -470,7 +470,7 @@ const changePassword = async (
     const { email, type, otp } = res.locals.validateChangePasswordResponse;
     /**
      * * if decoded token type is not change password, send 401 UnauthorizedError
-     * @param UnauthorizedError(origin, message)
+     * @function UnauthorizedError(origin, message)
      */
     if (type != TokenType.ChangePassword) {
       throw new UnauthorizedError(
@@ -480,14 +480,14 @@ const changePassword = async (
     }
     /**
      * * if provided code is not equal to redis otp, send 400 BadRequestError
-     * @param BadRequestError(origin, message)
+     * @function BadRequestError(origin, message)
      */
     if (otp != code) {
       throw new BadRequestError('changePassword-wrong-otp', 'Invalid code');
     }
     /**
      * * check if user email doesn't exists, send 400 BadRequestError
-     * @param BadRequestError(origin, message)
+     * @function BadRequestError(origin, message)
      */
     const user = await User.emailExist(email);
     Logger.debug('user: %s', user);
@@ -500,7 +500,7 @@ const changePassword = async (
     /**
      * * compare the new_password with the existing password
      * * if the new_password and the old_password is same send 409 ConflictError
-     * @param ConflictError(origin, message)
+     * @function ConflictError(origin, message)
      */
     const comparePassword = await user.validatePassword(new_password);
     Logger.debug('comparePassword: %s', comparePassword);
@@ -542,7 +542,7 @@ const refresh = async (req: Request, res: Response, next: NextFunction) => {
     if (email && type && identity && exp) {
       /**
        * * if decoded token type is not refresh, send 401 UnauthorizedError
-       * @param UnauthorizedError(origin, message)
+       * @function UnauthorizedError(origin, message)
        */
       if (type && type != TokenType.Refresh) {
         throw new UnauthorizedError(
@@ -552,7 +552,7 @@ const refresh = async (req: Request, res: Response, next: NextFunction) => {
       }
       /**
        * * check if user email doesn't exists, send 400 BadRequestError
-       * @param BadRequestError(origin, message)
+       * @function BadRequestError(origin, message)
        */
       const user = await User.emailExist(email);
       Logger.debug('user: %s', user);
@@ -616,7 +616,7 @@ const revokeAccessToken = async (
     if (email && type && identity && exp) {
       /**
        * * if decoded token type is not refresh, send 401 UnauthorizedError
-       * @param UnauthorizedError(origin, message)
+       * @function UnauthorizedError(origin, message)
        */
       if (type && type != TokenType.Access) {
         throw new UnauthorizedError(
@@ -626,7 +626,7 @@ const revokeAccessToken = async (
       }
       /**
        * * check if user email doesn't exists, send 400 BadRequestError
-       * @param BadRequestError(origin, message)
+       * @function BadRequestError(origin, message)
        */
       const user = await User.emailExist(email);
       Logger.debug('user: %s', user);
@@ -680,7 +680,7 @@ const revokeRefreshToken = async (
     if (email && type && identity && exp) {
       /**
        * * if decoded token type is not refresh, send 401 UnauthorizedError
-       * @param UnauthorizedError(origin, message)
+       * @function UnauthorizedError(origin, message)
        */
       if (type && type != TokenType.Refresh) {
         throw new UnauthorizedError(
@@ -690,7 +690,7 @@ const revokeRefreshToken = async (
       }
       /**
        * * check if user email doesn't exists, send 400 BadRequestError
-       * @param BadRequestError(origin, message)
+       * @function BadRequestError(origin, message)
        */
       const user = await User.emailExist(email);
       Logger.debug('user: %s', user);
