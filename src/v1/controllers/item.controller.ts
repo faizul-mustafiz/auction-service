@@ -226,6 +226,12 @@ const searchItem = async (req: Request, res: Response, next: NextFunction) => {
     Logger.debug('userId: %s', id);
     const { status } = req.query;
     Logger.debug('status: %s', status);
+    if (!status) {
+      throw new BadRequestError(
+        'searchItem-wrong-query-param-error',
+        'This query param is not supported',
+      );
+    }
     const items: any[] = await Item.find({
       status: status,
       createdBy: id,
