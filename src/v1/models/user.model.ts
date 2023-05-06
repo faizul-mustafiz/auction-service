@@ -22,6 +22,9 @@ const userSchema = new Schema<UserInterface, UserModel, UserMethods>(
       type: String,
       index: true,
     },
+    balance: {
+      type: Number,
+    },
     avatar: {
       type: String,
     },

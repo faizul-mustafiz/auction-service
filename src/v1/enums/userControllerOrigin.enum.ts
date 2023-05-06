@@ -3,4 +3,5 @@ export enum UserControllerOrigin {
   getOneUser = 'getOneUser-base-error:',
   updateOneUser = 'updateOneUser-base-error:',
   deleteOneUser = 'deleteOneUser-base-error:',
+  depositMoney = 'depositMoney-base-error',
 }

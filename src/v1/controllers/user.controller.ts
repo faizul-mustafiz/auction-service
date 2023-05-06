@@ -173,9 +173,51 @@ const deleteOneUser = async (
   }
 };
 
+const depositMoney = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    /**
+     * * get validateVerificationResponse value form res.locals
+     */
+    const { id } = res.locals.validateAccessResponse;
+    const updatingUserDocument = await User.findOne({ _id: id });
+    Logger.debug('updatingUserDocument: %s', updatingUserDocument);
+    if (!updatingUserDocument) {
+      throw new NotFoundError(
+        'depositMoney-no-user-with-provided-id',
+        'Deposit money unsuccessful',
+      );
+    }
+    const { amount } = req.body;
+    const previousBalance = updatingUserDocument.balance
+      ? updatingUserDocument.balance
+      : 0;
+    const updatedBalance = previousBalance + amount;
+    const changes = {
+      balance: updatedBalance,
+    };
+    const updatedUser = Object.assign(updatingUserDocument, changes);
+    const result = await updatedUser.save();
+    Logger.debug('result: %s', result);
+    return Success(res, {
+      message: `Successfully deposited amount $${amount}`,
+      result: result,
+    });
+  } catch (error: any) {
+    error.origin = error.origin
+      ? error.origin
+      : UserControllerOrigin.depositMoney;
+    next(error);
+  }
+};
+
 export const UserController = {
   getAllUser,
   getOneUser,
   updateOneUser,
   deleteOneUser,
+  depositMoney,
 };
