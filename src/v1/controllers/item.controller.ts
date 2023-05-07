@@ -8,6 +8,7 @@ import { BadRequestError } from '../errors/BadRequestError';
 import { ItemInterface } from '../interfaces/item.interface';
 import { ItemStatus } from '../enums/itemStatus.enum';
 import { generatePublishItemChanges } from '../utility/item.utility';
+import { setOngoingBiddingItemIdentity } from '../helpers/redis.helper';
 
 const getAllItems = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -295,6 +296,21 @@ const publishItem = async (req: Request, res: Response, next: NextFunction) => {
     Logger.debug('publishedItem: %s', publishedItem);
     const result = await publishedItem.save();
     Logger.debug('result: %s', result);
+    const ongoingBiddingRedisPayload = {
+      itemId: itemId,
+      currentHeightBid: result.startingPrice,
+      windowEndTime: result.windowEndTime,
+    };
+    console.log('ongoingBiddingRedisPayload', ongoingBiddingRedisPayload);
+    const ongoingBiddingRedisSetResponse = await setOngoingBiddingItemIdentity(
+      itemId,
+      result.windowEndTime,
+      ongoingBiddingRedisPayload,
+    );
+    console.log(
+      'ongoingBiddingRedisSetResponse',
+      ongoingBiddingRedisSetResponse,
+    );
     return Success(res, {
       message: 'Successfully published item',
       result: result,
