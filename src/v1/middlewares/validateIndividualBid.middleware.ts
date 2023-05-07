@@ -74,9 +74,7 @@ export const ValidateIndividualBid = async (
     const currentBidTime = moment().unix();
     if (Object.keys(individualBiddingRedisResponse).length !== 0) {
       const { lastBidTime } = individualBiddingRedisResponse;
-      console.log('lastBidTime', lastBidTime);
       const actualBidInterval = currentBidTime - lastBidTime;
-      console.log('actualBidInterval', actualBidInterval);
       if (actualBidInterval <= 20) {
         throw new BadRequestError(
           'ValidateIndividualBid-bidding-interval-not-passed-error',
@@ -93,7 +91,7 @@ export const ValidateIndividualBid = async (
       currentBidTime,
     };
     Logger.debug(
-      'validatedOngoingBiddingInfo',
+      'ValidateIndividualBid-validatedOngoingBiddingInfo',
       res.locals.validatedOngoingBiddingInfo,
     );
     next();

@@ -284,7 +284,7 @@ const publishItem = async (req: Request, res: Response, next: NextFunction) => {
         'No document found by this id',
       );
     }
-    const { isPublished, duration } = publishingItemDocument;
+    const { isPublished, duration, startingPrice } = publishingItemDocument;
     if (isPublished) {
       throw new BadRequestError(
         'publishItem-is-already-published-error',
@@ -297,19 +297,14 @@ const publishItem = async (req: Request, res: Response, next: NextFunction) => {
     const result = await publishedItem.save();
     Logger.debug('result: %s', result);
     const ongoingBiddingRedisPayload = {
-      itemId: itemId,
-      currentHeightBid: result.startingPrice,
-      windowEndTime: result.windowEndTime,
+      currentHeightBid: startingPrice,
+      windowEndTime: changes.windowEndTime,
     };
-    console.log('ongoingBiddingRedisPayload', ongoingBiddingRedisPayload);
-    const ongoingBiddingRedisSetResponse = await setOngoingBiddingItemIdentity(
+    Logger.debug('ongoingBiddingRedisPayload', ongoingBiddingRedisPayload);
+    await setOngoingBiddingItemIdentity(
       itemId,
-      result.windowEndTime,
+      changes.windowEndTime,
       ongoingBiddingRedisPayload,
-    );
-    console.log(
-      'ongoingBiddingRedisSetResponse',
-      ongoingBiddingRedisSetResponse,
     );
     return Success(res, {
       message: 'Successfully published item',

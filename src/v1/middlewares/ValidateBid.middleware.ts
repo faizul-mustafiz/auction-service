@@ -5,6 +5,7 @@ import {
   getOngoingBiddingItemIdentity,
   isOngoingBiddingItemIdentityExists,
 } from '../helpers/redis.helper';
+import { OngoingBiddingRedisPayloadInterface } from '../interfaces/ongoingBiddingRedisPayload.interface';
 
 export const ValidateBid = async (
   req: Request,
@@ -43,7 +44,6 @@ export const ValidateBid = async (
      */
     const ongoingBiddingRedisResponse: any =
       await getOngoingBiddingItemIdentity(itemId);
-    Logger.debug('ongoingBiddingRedisResponse', ongoingBiddingRedisResponse);
     const { currentHeightBid, windowEndTime } = ongoingBiddingRedisResponse;
     /**
      * * check if the requested {bid} is less or equal then the existing currentHeightBid
@@ -60,11 +60,14 @@ export const ValidateBid = async (
      * * pass { currentHeightBid, windowEndTime } in the res.locals.validatedOngoingBiddingInfo
      * * this value will be used in the next middleware chain
      */
-    const validatedOngoingBiddingInfo = {
-      currentHeightBid: currentHeightBid,
-      windowEndTime: windowEndTime,
+    const validatedOngoingBiddingInfo: OngoingBiddingRedisPayloadInterface = {
+      currentHeightBid: Number(currentHeightBid),
+      windowEndTime: Number(windowEndTime),
     };
-    console.log('validatedOngoingBiddingInfo', validatedOngoingBiddingInfo);
+    Logger.debug(
+      'ValidateBid-validatedOngoingBiddingInfo',
+      validatedOngoingBiddingInfo,
+    );
     res.locals.validatedOngoingBiddingInfo = validatedOngoingBiddingInfo;
     next();
   } catch (error: any) {

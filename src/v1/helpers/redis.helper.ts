@@ -1,3 +1,5 @@
+import { IndividualBiddingRedisPayloadInterface } from '../interfaces/individualBiddingRedisPayloadInterface.interface';
+import { OngoingBiddingRedisPayloadInterface } from '../interfaces/ongoingBiddingRedisPayload.interface';
 import { Logger } from '../loggers/logger';
 import { RedisClient } from '../plugins/redis.plugin';
 
@@ -235,7 +237,7 @@ export const isOngoingBiddingItemIdentityExists = async (identity: string) => {
 export const setOngoingBiddingItemIdentity = async (
   identity: string,
   expiry: number,
-  payload: any,
+  payload: OngoingBiddingRedisPayloadInterface,
 ) => {
   try {
     const result = await setIdentityWithHSet(`ob:${identity}`, expiry, payload);
@@ -281,7 +283,7 @@ export const isIndividualBiddingItemIdentityExists = async (
 export const setIndividualBiddingItemIdentity = async (
   identity: string,
   expiry: number,
-  payload: any,
+  payload: IndividualBiddingRedisPayloadInterface,
 ) => {
   try {
     const result = await setIdentityWithHSet(`ib:${identity}`, expiry, payload);

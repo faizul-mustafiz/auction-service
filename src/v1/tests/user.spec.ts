@@ -1,8 +1,11 @@
-import { testUserObj, testUserUpdateObj } from './common';
+import {
+  testDepositRequestBody,
+  testUserSignUpeRequestBody,
+  testUserUpdateUpdateRequestBody,
+} from './common';
 import { Server } from '../../../index';
 import { User } from '../models/user.model';
 import { AppConfig } from '../configs/app.config';
-import { deleteDataFromRedis } from '../helpers/redis.helper';
 /**
  * * import chai, chai-http dependencies
  * * also inject Server for mocha to run tests
@@ -36,13 +39,12 @@ const resetAllTestVariables = () => {
 };
 
 /**
- * * user controller endpoint test cases
+ * * user CRUD and deposit endpoint test cases
  */
-describe('User controller tests', () => {
+describe('User CRUD and deposit endpoint tests', () => {
   /**
    * @before will run at the start of the test cases
-   * * here we delete all the old data from auth_test_db
-   * * applications collection and users collection
+   * * here we delete all the old data from users collection in auction_test_db
    */
   before((done) => {
     User.deleteMany({}).then((result) => {
@@ -52,12 +54,11 @@ describe('User controller tests', () => {
   /**
    * @after will run after the last test cases of the file
    * * here we reset all the global variables used for the entire test file
-   * * also we do not need to perform any delete operation here as user delete
+   * * also we do not need to perform any delete operation for user, as user delete
    * * test case does that for us
    */
   after((done) => {
     resetAllTestVariables();
-    deleteDataFromRedis();
     done();
   });
   /**
@@ -68,12 +69,12 @@ describe('User controller tests', () => {
    * * test cases of user controller. we do not need to perform users creation test as
    * * sign-up process will create one user for us
    */
-  describe('[POST] /auth/sign-up |Sign-Up Process Test', () => {
+  describe('[POST] /auth/sign-up | Sign-Up Process Test', () => {
     it('it should initiate sign-up process using route: [POST] /auth/sign-up', (done) => {
       chai
         .request(Server)
         .post(`${baseRoute}/auth/sign-up`)
-        .send(testUserObj)
+        .send(testUserSignUpeRequestBody)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -102,7 +103,9 @@ describe('User controller tests', () => {
           res.body.should.have.property('message');
           res.body.should.have.property('result');
           res.body.result.should.be.a('object');
-          res.body.result.should.have.property('email').eql(testUserObj.email);
+          res.body.result.should.have
+            .property('email')
+            .eql(testUserSignUpeRequestBody.email);
           res.body.result.should.have.property('_id');
           res.body.result.should.have.property('accessToken');
           res.body.result.should.have.property('refreshToken');
@@ -115,9 +118,9 @@ describe('User controller tests', () => {
   /**
    * * get-all-user process test cases. Here only one user will be returned
    * * and we will assign the _id of the result[0]._id to our global variable
-   * * which we will use in our letter test cases.
+   * * which we will use in our later test cases.
    */
-  describe('[GET] /users |Get All Users Process Test', () => {
+  describe('[GET] /users | Get All Users Process Test', () => {
     it('it should get-all-users form users collection', (done) => {
       chai
         .request(Server)
@@ -133,7 +136,7 @@ describe('User controller tests', () => {
           res.body.result[0].should.have.property('_id');
           res.body.result[0].should.have
             .property('email')
-            .eql(testUserObj.email);
+            .eql(testUserSignUpeRequestBody.email);
           res.body.result[0].should.have.property('created_at');
           res.body.result[0].should.have.property('updated_at');
           testUserId = res.body.result[0]._id;
@@ -144,7 +147,7 @@ describe('User controller tests', () => {
   /**
    * * get-one-user process test cases
    */
-  describe('[GET] /users/{id} |Get One User Process Test', () => {
+  describe('[GET] /users/{id} | Get One User Process Test', () => {
     it('it should get-one-user form users collection', (done) => {
       chai
         .request(Server)
@@ -158,26 +161,26 @@ describe('User controller tests', () => {
           res.body.should.have.property('result');
           res.body.result.should.be.a('object');
           res.body.result.should.have.property('_id').eql(testUserId);
-          res.body.result.should.have.property('email').eql(testUserObj.email);
+          res.body.result.should.have
+            .property('email')
+            .eql(testUserSignUpeRequestBody.email);
           res.body.result.should.have.property('created_at');
           res.body.result.should.have.property('updated_at');
           done();
         });
     });
   });
+
   /**
-   * * update-one-user process test cases. here we will use the full user update object
-   * * where we will also pass email password and other objects inside testUserUpdateObj
-   * * this will also satisfy one condition on our code that a user can update his/her own
-   * * email if that email is not already registered. if the email exists the test will fail
+   * * deposit money to user account test cases
    */
-  describe('[POST] /users/{id} |Update One User Process Test', () => {
-    it('it should update-one-user form users collection', (done) => {
+  describe('[POST] /users/deposit | Deposit Money Process Test', () => {
+    it('it should deposit money to user account', (done) => {
       chai
         .request(Server)
-        .post(`${baseRoute}/users/${testUserId}`)
+        .post(`${baseRoute}/users/deposit`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(testUserUpdateObj)
+        .send(testDepositRequestBody)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -188,7 +191,41 @@ describe('User controller tests', () => {
           res.body.result.should.have.property('_id').eql(testUserId);
           res.body.result.should.have
             .property('email')
-            .eql(testUserUpdateObj.email);
+            .eql(testUserSignUpeRequestBody.email);
+          res.body.result.should.have
+            .property('balance')
+            .eql(testDepositRequestBody.amount);
+          res.body.result.should.have.property('created_at');
+          res.body.result.should.have.property('updated_at');
+          done();
+        });
+    });
+  });
+
+  /**
+   * * update-one-user process test cases. here we will use the full user update object
+   * * where we will also pass email password and other objects inside testUserUpdateObj
+   * * this will also satisfy one condition on our code that a user can update his/her own
+   * * email if that email is not already registered. if the email exists the test will fail
+   */
+  describe('[POST] /users/{id} | Update One User Process Test', () => {
+    it('it should update-one-user form users collection', (done) => {
+      chai
+        .request(Server)
+        .post(`${baseRoute}/users/${testUserId}`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(testUserUpdateUpdateRequestBody)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          res.body.should.have.property('success').eql(true);
+          res.body.should.have.property('message');
+          res.body.should.have.property('result');
+          res.body.result.should.be.a('object');
+          res.body.result.should.have.property('_id').eql(testUserId);
+          res.body.result.should.have
+            .property('email')
+            .eql(testUserUpdateUpdateRequestBody.email);
           res.body.result.should.have.property('created_at');
           res.body.result.should.have.property('updated_at');
           done();
@@ -198,7 +235,7 @@ describe('User controller tests', () => {
   /**
    * * delete-one-user process test cases
    */
-  describe('[DELETE] /users/{id} |Delete One User Process Test', () => {
+  describe('[DELETE] /users/{id} | Delete One User Process Test', () => {
     it('it should delete-one-user form users collection', (done) => {
       chai
         .request(Server)
@@ -214,7 +251,7 @@ describe('User controller tests', () => {
           res.body.result.should.have.property('_id').eql(testUserId);
           res.body.result.should.have
             .property('email')
-            .eql(testUserUpdateObj.email);
+            .eql(testUserUpdateUpdateRequestBody.email);
           res.body.result.should.have.property('created_at');
           res.body.result.should.have.property('updated_at');
           done();

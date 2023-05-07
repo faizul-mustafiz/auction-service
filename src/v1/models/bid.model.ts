@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
+import { BidInterface } from '../interfaces/bid.interface';
 
-const bidSchema = new Schema(
+const bidSchema = new Schema<BidInterface>(
   {
     userId: {
       type: String,
@@ -23,4 +24,4 @@ const bidSchema = new Schema(
   },
 );
 
-export const Bid = model('Bid', bidSchema);
+export const Bid = model<BidInterface>('Bid', bidSchema);

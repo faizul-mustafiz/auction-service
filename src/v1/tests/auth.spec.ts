@@ -1,4 +1,4 @@
-import { testUserObj, testNewPassword } from './common';
+import { testUserSignUpeRequestBody, testNewPassword } from './common';
 import { Server } from '../../../index';
 import { User } from '../models/user.model';
 import { AppConfig } from '../configs/app.config';
@@ -40,11 +40,10 @@ const resetAllTestVariables = () => {
 /**
  * * auth controller endpoint test cases
  */
-describe('Auth controller tests', () => {
+describe('Auth endpoints tests', () => {
   /**
    * @before will run at the start of the test cases
-   * * here we delete all the old data from auth_test_db
-   * * applications collection and users collection
+   * * here we delete all the old data from users collection in auction_test_db
    */
   before((done) => {
     User.deleteMany({}).then((result) => {
@@ -65,12 +64,12 @@ describe('Auth controller tests', () => {
    * * it will use app info and device info header to request
    * * compete sign-up using /verify route
    */
-  describe('[POST] /auth/sign-up |Sign-Up Process Test', () => {
+  describe('[POST] /auth/sign-up | Sign-Up Process Test', () => {
     it('it should initiate sign-up process using route: [POST] /auth/sign-up', (done) => {
       chai
         .request(Server)
         .post(`${baseRoute}/auth/sign-up`)
-        .send(testUserObj)
+        .send(testUserSignUpeRequestBody)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -99,7 +98,9 @@ describe('Auth controller tests', () => {
           res.body.should.have.property('message');
           res.body.should.have.property('result');
           res.body.result.should.be.a('object');
-          res.body.result.should.have.property('email').eql(testUserObj.email);
+          res.body.result.should.have
+            .property('email')
+            .eql(testUserSignUpeRequestBody.email);
           res.body.result.should.have.property('_id');
           res.body.result.should.have.property('accessToken');
           res.body.result.should.have.property('refreshToken');
@@ -115,12 +116,12 @@ describe('Auth controller tests', () => {
    * * it will use app info and device info header to request
    * * compete sign-in using /verify route
    */
-  describe('[POST] /auth/sign-in |Sign-in Process Test', () => {
+  describe('[POST] /auth/sign-in | Sign-in Process Test', () => {
     it('it should initiate sign-in process using route: [POST] /auth/sign-in ', (done) => {
       chai
         .request(Server)
         .post(`${baseRoute}/auth/sign-in`)
-        .send(testUserObj)
+        .send(testUserSignUpeRequestBody)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -161,12 +162,12 @@ describe('Auth controller tests', () => {
    * * forgot-password process test. it will use app info and device info header
    * * as this is a public route and need this request to perform from valid device
    */
-  describe('[POST] /auth/forgot-password |Forgot-Password Process Test', () => {
+  describe('[POST] /auth/forgot-password | Forgot-Password Process Test', () => {
     it('it should initiate forgot-password process', (done) => {
       chai
         .request(Server)
         .post(`${baseRoute}/auth/forgot-password`)
-        .send({ email: testUserObj.email })
+        .send({ email: testUserSignUpeRequestBody.email })
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -186,7 +187,7 @@ describe('Auth controller tests', () => {
    * * change-password process test. here this test will use the forgotPasswordToken and
    * * forgotPasswordCode to perform change-password process
    */
-  describe('[POST] /auth/change-password |Change-Password Process Test', () => {
+  describe('[POST] /auth/change-password | Change-Password Process Test', () => {
     it('it should complete change-password process', (done) => {
       chai
         .request(Server)
@@ -208,7 +209,7 @@ describe('Auth controller tests', () => {
    * * refresh process test. here this test will use the refresh token to
    * * get new pair of accessToken and refreshToken
    */
-  describe('[POST] /auth/refresh |Refresh [tokens] Process Test', () => {
+  describe('[POST] /auth/refresh | Refresh [tokens] Process Test', () => {
     it('it should complete refresh both access and refresh token process', (done) => {
       chai
         .request(Server)
@@ -234,7 +235,7 @@ describe('Auth controller tests', () => {
    * * revoke-access-token process test. here this test will use the access token
    * * to revoke the access token
    */
-  describe('[POST] /auth/revoke-at |Revoke-Access-Token Process Test', () => {
+  describe('[POST] /auth/revoke-at | Revoke-Access-Token Process Test', () => {
     it('it should complete access token revoke process', (done) => {
       chai
         .request(Server)
@@ -256,7 +257,7 @@ describe('Auth controller tests', () => {
    * * revoke-refresh-token process test. here this test will use the refresh token
    * * to revoke the access token
    */
-  describe('[POST] /auth/revoke-rt |Revoke-Refresh-Token Process Test', () => {
+  describe('[POST] /auth/revoke-rt | Revoke-Refresh-Token Process Test', () => {
     it('it should complete access token revoke process', (done) => {
       chai
         .request(Server)

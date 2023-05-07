@@ -7,9 +7,12 @@ import {
   setIndividualBiddingItemIdentity,
   setOngoingBiddingItemIdentity,
 } from '../helpers/redis.helper';
-import { Success } from '../reponses/httpResponse';
+import { Created } from '../reponses/httpResponse';
 import { Logger } from '../loggers/logger';
-
+import { BidInterface } from '../interfaces/bid.interface';
+import { ItemDocumentChangesInterface } from '../interfaces/itemDocumentChanges.interface';
+import { OngoingBiddingRedisPayloadInterface } from '../interfaces/ongoingBiddingRedisPayload.interface';
+import { IndividualBiddingRedisPayloadInterface } from '../interfaces/individualBiddingRedisPayloadInterface.interface';
 const bidItem = async (req: Request, res: Response, next: NextFunction) => {
   try {
     /**
@@ -30,7 +33,6 @@ const bidItem = async (req: Request, res: Response, next: NextFunction) => {
      */
     const {
       currentHeightBid,
-      duration,
       individualBiddingIdentity,
       currentBidTime,
       windowEndTime,
@@ -52,8 +54,8 @@ const bidItem = async (req: Request, res: Response, next: NextFunction) => {
      * * add requesting userId as currentHighestBidder in the item document
      * * save the document to db
      */
-    const itemDocumentChanges = {
-      currentHighestBid: bid,
+    const itemDocumentChanges: ItemDocumentChangesInterface = {
+      currentHighestBid: Number(bid),
       currentHighestBidder: id,
     };
     const updatedItemDocument = Object.assign(
@@ -65,43 +67,45 @@ const bidItem = async (req: Request, res: Response, next: NextFunction) => {
     /**
      * * generate new bid document and save to bids collection
      */
-    const newBid: any = new Bid({
+    const bidObject: BidInterface = {
       userId: id,
       itemId: itemId,
       heightBid: bid,
-    });
-    const bidResult = await newBid.save();
-    Logger.debug(bidResult, bidResult);
+    };
+    const newBid = new Bid(bidObject);
+    const bidResult: any = await newBid.save();
+    Logger.debug('bidResult', bidResult);
     /**
      * * generate ongoingBiddingRedisPayload and save data to redis
      * @function setOngoingBiddingItemIdentity(identity,expiry,payload)
      */
-    const ongoingBiddingRedisPayload = {
-      currentHeightBid: bid,
-      windowEndTime: windowEndTime,
+    const ongoingBiddingRedisPayload: OngoingBiddingRedisPayloadInterface = {
+      currentHeightBid: Number(bid),
+      windowEndTime: Number(windowEndTime),
     };
     await setOngoingBiddingItemIdentity(
       itemId,
-      duration,
+      windowEndTime,
       ongoingBiddingRedisPayload,
     );
     /**
      * * generate individualBiddingRedisPayload and save data to redis
      * @function setIndividualBiddingItemIdentity(identity,expiry,payload)
      */
-    const individualBiddingRedisPayload = {
-      lastBidTime: currentBidTime,
-      lastBid: bid,
-    };
+    const individualBiddingRedisPayload: IndividualBiddingRedisPayloadInterface =
+      {
+        lastBidTime: Number(currentBidTime),
+        lastBid: Number(bid),
+      };
     await setIndividualBiddingItemIdentity(
       individualBiddingIdentity,
-      duration,
+      windowEndTime,
       individualBiddingRedisPayload,
     );
     /**
-     * * send Success to client for success in placing bid
+     * * send Created to client for success in placing bid
      */
-    return Success(res, {
+    return Created(res, {
       message: 'Bid successful',
       result: {
         lastHeightBid: currentHeightBid,
