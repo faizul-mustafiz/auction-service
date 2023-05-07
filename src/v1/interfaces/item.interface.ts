@@ -3,6 +3,7 @@ export interface ItemInterface {
   startingPrice: number;
   duration: number;
   currentHighestBid?: number;
+  currentHighestBidder?: string;
   windowStartTime?: number;
   windowEndTime?: number;
   isPublished: boolean;

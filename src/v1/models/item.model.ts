@@ -16,9 +16,13 @@ const itemSchema = new Schema<ItemInterface, ItemModel>(
     },
     duration: {
       type: Number,
+      required: true,
     },
     currentHighestBid: {
       type: Number,
+    },
+    currentHighestBidder: {
+      type: String,
     },
     windowStartTime: {
       type: Number,

@@ -1,3 +1,4 @@
 import { AuthController } from './auth.controller';
 import { UserController } from './user.controller';
-export { AuthController, UserController };
+import { BidController } from './bid.controller';
+export { AuthController, UserController, BidController };
