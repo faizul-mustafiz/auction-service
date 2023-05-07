@@ -225,8 +225,9 @@ export const deleteChangePasswordTokenIdentity = async (identity: string) => {
  */
 export const isOngoingBiddingItemIdentityExists = async (identity: string) => {
   try {
-    const result = await isIdentityBlacklisted(`ob:${identity}`);
+    const result = await isIdentityExists(`ob:${identity}`);
     Logger.debug('isOngoingBiddingItemIdentityExists-result: %s', result);
+    return result;
   } catch (error) {
     Logger.error('isOngoingBiddingItemIdentityExists-error', error);
   }
@@ -239,6 +240,7 @@ export const setOngoingBiddingItemIdentity = async (
   try {
     const result = await setIdentityWithHSet(`ob:${identity}`, expiry, payload);
     Logger.debug('setOngoingBiddingItemIdentity-result: %s', result);
+    return result;
   } catch (error) {
     Logger.error('setOngoingBiddingItemIdentity-error', error);
   }
@@ -247,6 +249,7 @@ export const getOngoingBiddingItemIdentity = async (identity: string) => {
   try {
     const result = await getHSetIdentityPayload(`ob:${identity}`);
     Logger.debug('getOngoingBiddingItemIdentity-result: %s', result);
+    return result;
   } catch (error) {
     Logger.error('getOngoingBiddingItemIdentity-error', error);
   }
@@ -255,6 +258,7 @@ export const deleteOngoingBiddingItemIdentity = async (identity: string) => {
   try {
     const result = await deleteIdentity(`ob:${identity}`);
     Logger.debug('deleteOngoingBiddingItemIdentity-result: %s', result);
+    return result;
   } catch (error) {
     Logger.error('deleteOngoingBiddingItemIdentity-error', error);
   }
@@ -267,8 +271,9 @@ export const isIndividualBiddingItemIdentityExists = async (
   identity: string,
 ) => {
   try {
-    const result = await isIdentityBlacklisted(`ib:${identity}`);
+    const result = await isIdentityExists(`ib:${identity}`);
     Logger.debug('isIndividualBiddingItemIdentityExists-result: %s', result);
+    return result;
   } catch (error) {
     Logger.error('isIndividualBiddingItemIdentityExists-error', error);
   }
@@ -281,6 +286,7 @@ export const setIndividualBiddingItemIdentity = async (
   try {
     const result = await setIdentityWithHSet(`ib:${identity}`, expiry, payload);
     Logger.debug('setIndividualBiddingItemIdentity-result: %s', result);
+    return result;
   } catch (error) {
     Logger.error('setIndividualBiddingItemIdentity-error', error);
   }
@@ -289,6 +295,7 @@ export const getIndividualBiddingItemIdentity = async (identity: string) => {
   try {
     const result = await getHSetIdentityPayload(`ib:${identity}`);
     Logger.debug('getIndividualBiddingItemIdentity-result: %s', result);
+    return result;
   } catch (error) {
     Logger.error('getIndividualBiddingItemIdentity-error', error);
   }
@@ -297,6 +304,7 @@ export const deleteIndividualBiddingItemIdentity = async (identity: string) => {
   try {
     const result = await deleteIdentity(`ib:${identity}`);
     Logger.debug('deleteIndividualBiddingItemIdentity-result: %s', result);
+    return result;
   } catch (error) {
     Logger.error('deleteIndividualBiddingItemIdentity-error', error);
   }
