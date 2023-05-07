@@ -3,13 +3,16 @@ dotenv.config();
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import { AuthRoutes, UserRoutes, ItemRoutes } from './routes';
+import { AuthRoutes, UserRoutes, ItemRoutes, BidRoutes } from './routes';
 import { AppConfig } from './configs/app.config';
 import { HttpLogger } from './loggers/httpLogger';
 import { ErrorHandler } from './middlewares/errorHandler.middleware';
 import { ErrorLogger } from './middlewares/errorLogger.middleware';
 import { InvalidPath } from './middlewares/invalidPath.middleware';
-import { InitiateRedisPluginConnection } from './plugins/redis.plugin';
+import {
+  InitiateRedisPluginConnection,
+  SubscribeToRedisKeyExpiredEvent,
+} from './plugins/redis.plugin';
 import { InitiateMongoPluginConnection } from './plugins/mongo.plugin';
 
 /**
@@ -31,6 +34,7 @@ app.use(cors());
  * * Connect to redis client
  */
 InitiateRedisPluginConnection();
+SubscribeToRedisKeyExpiredEvent();
 /**
  * * Connect to mongoDB client
  */
@@ -50,6 +54,8 @@ app.get(`${baseRoute}/health`, (req, res) => {
 app.use(`${baseRoute}/auth`, AuthRoutes);
 app.use(`${baseRoute}/users`, UserRoutes);
 app.use(`${baseRoute}/items`, ItemRoutes);
+app.use(`${baseRoute}/bid`, BidRoutes);
+
 /**
  * * Error logger middleware
  * * Error handler middleware

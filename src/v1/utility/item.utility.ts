@@ -12,3 +12,11 @@ export const generatePublishItemChanges = (duration: number) => {
     windowEndTime: windowEndTime,
   };
 };
+
+export const extractItemIdFromBiddingKey = (biddingKey: string): any => {
+  const idsList = biddingKey.split(':');
+  if (idsList.length > 0) {
+    const itemId = idsList[1];
+    return itemId;
+  }
+};
