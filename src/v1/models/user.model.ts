@@ -81,7 +81,7 @@ userSchema.static('emailExist', function (email: string) {
 });
 
 /**
- * delete these object keys before returning the db document to consumer
+ * * delete these object keys before returning the db document to consumer
  * @returns user document with deleted keys
  */
 userSchema.methods.toJSON = function () {

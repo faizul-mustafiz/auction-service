@@ -14,8 +14,9 @@ const getAllUser = async (req: Request, res: Response, next: NextFunction) => {
     Logger.debug('getAllUser-result: %s', result);
     Logger.info('getAllUser-count: %s', count);
     /**
-     * * if there is no user in the user collection send 203 NonAuthoritativeError
-     * @function NonAuthoritativeError(origin,message)
+     * * if there is no user in the user collection send 200 OK response
+     * * with message is pointing the user collection is empty
+     * @function Success(res,payload)
      */
     if (count === 0) {
       return Success(res, {
