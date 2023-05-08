@@ -7,7 +7,8 @@ export const environment = {
   API_HOST: process.env.API_HOST as string,
   API_PORT: process.env.API_PORT as string,
   BASE_API_ROUTE: process.env.BASE_API_ROUTE as string,
-
+  //bidding environment variables
+  BIDDING_INTERVAL: process.env.BIDDING_INTERVAL as string,
   // redis environments variables
   REDIS_URL: process.env.REDIS_URL_TEST as string,
   REDIS_HOST: process.env.REDIS_HOST as string,

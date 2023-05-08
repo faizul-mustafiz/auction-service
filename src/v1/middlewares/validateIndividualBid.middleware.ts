@@ -1,15 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import { Logger } from '../loggers/logger';
 import { BadRequestError } from '../errors/BadRequestError';
-import {
-  getIndividualBiddingItemIdentity,
-  getOngoingBiddingItemIdentity,
-  isIndividualBiddingItemIdentityExists,
-  isOngoingBiddingItemIdentityExists,
-} from '../helpers/redis.helper';
+import { getIndividualBiddingItemIdentity } from '../helpers/redis.helper';
 import moment from 'moment';
 import { User } from '../models/user.model';
 import { NotFoundError } from '../errors/NotFoundError';
+import { BiddingConfig } from '../configs/bid.config';
 
 export const ValidateIndividualBid = async (
   req: Request,
@@ -75,7 +71,7 @@ export const ValidateIndividualBid = async (
     if (Object.keys(individualBiddingRedisResponse).length !== 0) {
       const { lastBidTime } = individualBiddingRedisResponse;
       const actualBidInterval = currentBidTime - lastBidTime;
-      if (actualBidInterval <= 20) {
+      if (actualBidInterval <= BiddingConfig.biddingInterval) {
         throw new BadRequestError(
           'ValidateIndividualBid-bidding-interval-not-passed-error',
           'You need to wait 5sec for your next bid',
