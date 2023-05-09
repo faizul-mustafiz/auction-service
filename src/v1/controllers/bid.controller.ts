@@ -85,7 +85,7 @@ const bidItem = async (req: Request, res: Response, next: NextFunction) => {
     };
     await setOngoingBiddingItemIdentity(
       itemId,
-      windowEndTime,
+      Number(windowEndTime),
       ongoingBiddingRedisPayload,
     );
     /**
@@ -99,7 +99,7 @@ const bidItem = async (req: Request, res: Response, next: NextFunction) => {
       };
     await setIndividualBiddingItemIdentity(
       individualBiddingIdentity,
-      windowEndTime,
+      Number(windowEndTime),
       individualBiddingRedisPayload,
     );
     /**

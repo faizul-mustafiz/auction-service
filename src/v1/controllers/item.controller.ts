@@ -108,6 +108,10 @@ const createOneItem = async (
       isPublished: false,
       status: ItemStatus.draft,
       createdBy: id,
+      currentHighestBid: 0,
+      currentHighestBidder: '',
+      windowStartTime: 0,
+      windowEndTime: 0,
     };
     /**
      * * initiating new item model and saving the data to mongoDB
