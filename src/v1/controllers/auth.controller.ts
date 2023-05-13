@@ -281,7 +281,7 @@ const continueSignIn = async (
      * * check if user email doesn't exists, send 400 BadRequestError
      * @function BadRequestError(origin,message)
      */
-    const user = await User.emailExist(email);
+    const user: any = await User.emailExist(email);
     Logger.debug('user: %s', user);
     if (!user) {
       throw new BadRequestError(
@@ -301,6 +301,8 @@ const continueSignIn = async (
      * * generate sing-in response body
      */
     const result = {
+      _id: user._doc._id,
+      email: user._doc.email,
       accessToken,
       refreshToken,
     };
