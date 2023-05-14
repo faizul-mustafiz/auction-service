@@ -25,7 +25,7 @@ To get started with the project quickly do these steps
 Clone the repo:
 
 ```
-https://github.com/faizul-mustafiz/auction-service.git
+git colone https://github.com/faizul-mustafiz/auction-service.git
 ```
 
 Install the dependencies:
@@ -66,8 +66,6 @@ Or you can try the other commands listed in the `script` section of package.json
 ## Project Structure
 
 ```
-|--.github             # github action config files
-|--.husky              # github hooks config files
 |--src\v1
     |--configs\        # config of plugins and environments
     |--controllers\    # controller functions for different routes
