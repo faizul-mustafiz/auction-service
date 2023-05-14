@@ -19,6 +19,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { Item } from '../models/item.model';
 import { ItemStatus } from '../enums/itemStatus.enum';
+import { User } from '../models/user.model';
 const { baseRoute } = AppConfig;
 const should = chai.should();
 chai.use(chaiHttp);
@@ -67,7 +68,11 @@ describe('Item CRUD, publish and bidding endpoint tests', () => {
   after((done) => {
     resetAllTestVariables();
     deleteDataFromRedis();
-    done();
+    Item.deleteMany({}).then((result) => {
+      User.deleteMany({}).then((result) => {
+        done();
+      });
+    });
   });
 
   /**
