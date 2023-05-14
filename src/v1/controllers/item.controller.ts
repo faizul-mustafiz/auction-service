@@ -237,15 +237,20 @@ const searchItem = async (req: Request, res: Response, next: NextFunction) => {
         'This query param is not supported',
       );
     }
-    const items: any[] = await Item.find({
+    const nonOngoingItems: any[] = await Item.find({
       status: status,
       createdBy: id,
     }).sort({
       createdAt: -1,
     });
+    const onGoingItems: any[] = await Item.find({
+      status: status,
+    }).sort({
+      createdAt: -1,
+    });
     const count = await Item.count();
     const result = {
-      items: items,
+      items: status === ItemStatus.ongoing ? onGoingItems : nonOngoingItems,
       totalItems: count,
     };
     return Success(res, {
