@@ -244,3 +244,28 @@ For creating an item you need to hit `http://{host}:{port}/api/v1/items` page wi
 For bidding you can only bid on published items only. you can bid on item which has to be greater than the starting price and current height bid if there is any. After the bidding window is expired the bidding is completed automatically and `currentHeightBid` and `currentHeightBidder` information is stored.
 
 Also every bid information is stored fro future logging purpose
+
+## Docker Deployment
+
+To deploy auction-service using docker you need to build the image first.
+
+### Build
+
+```
+docker build --build-arg NODE_ENV=<environment_name> -t auction-service:<tag_name> .
+```
+
+then when the build is compete then use this command to run the container.
+
+### Run
+
+```
+docker run --rm -dp 3030:80 --restart unless-stopped --name auction-service auction-service:<tag_name>
+```
+
+We need to pass `NODE_ENV` value as build argument `--build-arg` in the run command. The environments are
+
+- development
+- staging
+- production
+- testing
