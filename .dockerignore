@@ -1,0 +1,11 @@
+node_modules
+**/logs
+dist
+.env.example
+.github
+.git
+.gitignore
+.mocharc.json
+.prettierignore
+.prettierrc
+README.md
